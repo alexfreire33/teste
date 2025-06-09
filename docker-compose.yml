@@ -4,7 +4,7 @@ services:
   postgres:
     image: postgres:16
     container_name: postgres
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -14,26 +14,29 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./init-db:/docker-entrypoint-initdb.d
+      - ./scripts:/scripts
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d taxa"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
-      retries: 5
-    command: >
-      bash -c "
-      # Processa backup compactado (.sql.gz)
-      if ls /docker-entrypoint-initdb.d/*.sql.gz 1> /dev/null 2>&1; then
-        echo 'Processando backup SQL compactado...'
-        gunzip -c /docker-entrypoint-initdb.d/*.sql.gz | psql -U postgres -d taxa
-      # Processa backup não compactado (.sql)
-      elif ls /docker-entrypoint-initdb.d/*.sql 1> /dev/null 2>&1; then
-        echo 'Processando backup SQL não compactado...'
-        psql -U postgres -d taxa -f /docker-entrypoint-initdb.d/*.sql
-      fi
-      
-      # Inicia o PostgreSQL normalmente
-      exec /usr/local/bin/docker-entrypoint.sh postgres
-      "
+      retries: 10
+    entrypoint: ["/bin/bash", "-c", "exec docker-entrypoint.sh postgres"]
+
+  db-setup:
+    image: postgres:16
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./init-db:/docker-entrypoint-initdb.d
+      - ./scripts:/scripts
+    environment:
+      PGHOST: postgres
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: taxa
+    command: ["/bin/bash", "-c", "/scripts/download_backup.sh && /scripts/restore_backup.sh"]
 
   backend:
     build:
@@ -52,7 +55,8 @@ services:
       postgres:
         condition: service_healthy
     ports:
-      - '3001:3001'
+      - '3001:3001'  # API HTTP
+      - '3002:3002'  # WebSocket
 
   survey-dashboard:
     build:
