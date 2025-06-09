@@ -7,7 +7,7 @@ const pool = new Pool({
   host: 'database-1.ck56myso23jy.us-east-1.rds.amazonaws.com',         
   database: 'taxa',
   password: 'postgres',
-  port: 5432,
+  port: 5433,
   schema: 'inside',  
 });
 
