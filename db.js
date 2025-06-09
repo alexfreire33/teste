@@ -9,6 +9,7 @@ const pool = new Pool({
   password: 'postgres',
   port: 5432,
   shema: 'inside',
+  
 });
 
 export default pool;
