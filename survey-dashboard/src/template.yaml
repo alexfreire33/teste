@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Aplicação Node.js com Lambda + API Gateway + RDS
+
+Globals:
+  Function:
+    Timeout: 10
+    Runtime: nodejs18.x
+    Environment:
+      Variables:
+        DB_HOST: database-1.ck56myso23jy.us-east-1.rds.amazonaws.com
+        DB_USER: postgres
+        DB_PASSWORD: postgres
+        DB_NAME: taxa
+
+Resources:
+  NodeApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambdaHandler
+      CodeUri: .
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /time
+            Method: get
