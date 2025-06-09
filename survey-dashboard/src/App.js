@@ -16,8 +16,8 @@ import {
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
-const API_URL = 'http://localhost:3001/survey-report';
-const WS_URL = 'ws://localhost:3002'; // URL do WebSocket
+const API_URL = 'http://54.197.94.183:3001/survey-report';
+const WS_URL = 'ws://54.197.94.183:3002'; // URL do WebSocket
 
 function App() {
   const [originLastIds, setOriginLastIds] = useState({
