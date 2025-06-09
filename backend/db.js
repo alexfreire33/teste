@@ -9,7 +9,11 @@ const pool = new Pool({
   password: 'postgres',
   port: 5433,
   schema: 'inside',  
+  ssl: {
+    rejectUnauthorized: false, // para testes
+  }
 });
+
 
 
 export default pool;
