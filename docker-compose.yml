@@ -11,7 +11,7 @@ services:
       DB_USER: postgres            
       DB_PASSWORD: postgres    
       DB_NAME: taxa                  
-      DB_HOST: seu-endereco-rds.rds.amazonaws.com  
+      DB_HOST: database-1.ck56myso23jy.us-east-1.rds.amazonaws.com' 
       DB_SCHEMA: inside
       DB_PORT: 5432
     ports:
