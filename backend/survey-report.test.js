@@ -1,6 +1,6 @@
 import request from 'supertest';
-import { app } from 'app.js';
-import { buildQuery, formatReport } from 'survey-report.service.js';
+import { app } from 'app.js'; // <- Note a extensão .js
+import { buildQuery, formatReport } from 'survey-report.service.js'; // <- Extensão .js
 
 // Mock do pool
 jest.mock('db.js', () => ({
