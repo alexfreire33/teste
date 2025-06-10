@@ -1,12 +1,11 @@
 import request from 'supertest';
-import { app } from './app.js';
-import { buildQuery, formatReport } from './survey-report.service.js';
+import { app } from 'app.js';
+import { buildQuery, formatReport } from 'survey-report.service.js';
 
 // Mock do pool
-jest.mock('./db.js', () => ({
+jest.mock('db.js', () => ({
     query: jest.fn()
 }));
-
 describe('Survey Report API', () => {
     beforeEach(() => {
         jest.clearAllMocks();
@@ -64,7 +63,7 @@ describe('Survey Report API', () => {
                 { origin: 'email', period: '01/2024', total: 50, new_max_id: 100 }
             ];
             
-            require('./db.js').query.mockResolvedValue({ rows: mockRows });
+            db.query.mockResolvedValue({ rows: mockRows });
             
             const response = await request(app)
                 .post('/survey-report')
@@ -80,7 +79,7 @@ describe('Survey Report API', () => {
         });
 
         it('deve retornar 500 em caso de erro no banco', async () => {
-            require('./db.js').query.mockRejectedValue(new Error('DB error'));
+            db.query.mockRejectedValue(new Error('DB error'));
             
             const response = await request(app)
                 .post('/survey-report')
