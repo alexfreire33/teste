@@ -40,12 +40,14 @@ Minha estratégia de performance foi otimizar a busca na consulta utilizando o �
    git clone https://github.com/alexfreire33/teste.git
    cd teste
    ```
-2. Suba os containers:
+2. Suba os containers (Aguarde finalizar todo o processo):
    ```sh
    docker compose up --build
    # ou
    docker-compose up --build
    ```
+2. Url para testar localmente:  
+  [http://localhost:3000/](http://localhost:3000/)
 
 ### Opção 2: Acessar Demonstração Online
 - **Link do EC2 + RDS**:  
